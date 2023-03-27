@@ -15,26 +15,27 @@ I added the commands to delete the partial stage files in the flow like synthesi
 
 The suggested improvement is to add the clear commands in the Flow tutorial. Due to some reason or other, if during the execution of the flow, the terminal goes into an error, one may wish to delete all or individual stages of the flow like synthesis, floorplanning, macro placement, clock-tree synthesis, routing and layout generation. I created a pull request for the same and it got accepted.
 
-The added lines of command in the ''' .docs/tutorials/FlowTutorial.md ''' is illustrated below:
+The added lines of command in the `.docs/tutorials/FlowTutorial.md` is illustrated below:
 
-[Commands added to delete partial stages](images/command.png)
+![Commands added to delete partial stages](images/command.png)
 
 ### - Changes in Global Routing source code to decrease CPU usage time 
 
-The suggested improvement is in the source file of global routing. The file which has been changed is ''' ./tools/OpenROAD/src/grt/src/Grih.cpp ''' :
+The suggested improvement is in the source file of global routing. The file which has been changed is `./tools/OpenROAD/src/grt/src/Grih.cpp` :
 
 Before: 
 
-[Grip.cpp before editing](images/before.png)
+![Grip.cpp before editing](images/before.png)
 
 After:
 
-[Grip.cpp after editing](images/after.png)
+![Grip.cpp after editing](images/after.png)
 
 Effect: 
 
 The time for the flow to complete before the modification:
-'''
+
+```
 Elapsed time: 0:05.58[h:]min:sec. CPU time: user 5.01 sys 0.28 (94%). Peak memory: 480916KB.
 cp results/asap7/ibex/base/6_1_merged.gds results/asap7/ibex/base/6_final.gds
 Log                   	Elapsed seconds
@@ -56,10 +57,11 @@ Log                   	Elapsed seconds
 5_2_TritonRoute             	3440
 6_1_merge                      	5
 6_report                     	105
-'''
+```
 
 The time of the flow after modification:
-'''
+
+```
 Elapsed time: 0:05.09[h:]min:sec. CPU time: user 4.77 sys 0.31 (99%). Peak memory: 481532KB.
 cp results/asap7/ibex/base/6_1_merged.gds results/asap7/ibex/base/6_final.gds
 Log                   	Elapsed seconds
@@ -81,11 +83,12 @@ Log                   	Elapsed seconds
 5_2_TritonRoute             	3804
 6_1_merge                      	5
 6_report                     	115
-'''
+```
 
 So, clearly we can see that the CPU usage time has reduced significantly. 
 I have also performed DRC check:
-'''
+
+```
 [INFO][FLOW] Using platform directory ./platforms/asap7
 [INFO-FLOW] ASU ASAP7 - version 2
 Default PVT selection: BC
@@ -123,14 +126,14 @@ echo ./designs/asap7/ibex/ > ./reports/asap7/ibex/base/design-dir.txt
 [INFO] finish__timing__drv__hold_violation_count pass test: 0.0 <= 10.0
 [INFO] finish__timing__wns_percent_delay pass test: -5.258063 >= -10.0
 All metadata rules passed (22 rules)
-'''
+```
 
 Justification: 
-In the ''' Grid.cpp ''' file, there is a function, ''' getPositionOnGrid() ''' where co-ordinates of a position is calculated and stored in variables ''' gcell_id_x ''' and ''' gcell_id_y ''' which are x center and y center respectively. I found out that there is extra computation work being done when x center in greater than or equal to ''' x_grids_ ''' which is the limit of x center or when y center in greater than or equal to ''' y_grids_ ''' which is the limit of y center. Since it is already more than the limiting co-ordinates, subtracting a unit co-ordinate won't make the position inside the Grid anyways. So, commenting this portion of code does not affect the flow and the computatio time also gets reduced.
+In the `Grid.cpp` file, there is a function, `getPositionOnGrid()` where co-ordinates of a position is calculated and stored in variables `gcell_id_x` and `gcell_id_y` which are x center and y center respectively. I found out that there is extra computation work being done when x center in greater than or equal to `x_grids_` which is the limit of x center or when y center in greater than or equal to `y_grids_` which is the limit of y center. Since it is already more than the limiting co-ordinates, subtracting a unit co-ordinate won't make the position inside the Grid anyways. So, commenting this portion of code does not affect the flow and the computatio time also gets reduced.
 
 ### - RTL to GDSII flow for AMBA APB Communication Protocol 
 
-Out of my own curiosity, I wrote the RTL code for APB communication protocol with a master and two slaves and generated the ''' .gds ''' file for it and performed several functions on it like Autotuner, DRC rule check, verified the netlist, etc.
+Out of my own curiosity, I wrote the RTL code for APB communication protocol with a master and two slaves and generated the `.gds` file for it and performed several functions on it like Autotuner, DRC rule check, verified the netlist, etc.
 
 
 
