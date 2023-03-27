@@ -11,7 +11,7 @@ I added the commands to delete the partial stage files in the flow like synthesi
 
 ## 2. IMPROVEMENTS
 
-### - Command to delete all stages or any partial stage (Pull request accepted #881 )
+* ###  Command to delete all stages or any partial stage (Pull request accepted #881 )
 
 The suggested improvement is to add the clear commands in the Flow tutorial. Due to some reason or other, if during the execution of the flow, the terminal goes into an error, one may wish to delete all or individual stages of the flow like synthesis, floorplanning, macro placement, clock-tree synthesis, routing and layout generation. I created a pull request for the same and it got accepted.
 
@@ -19,7 +19,7 @@ The added lines of command in the `.docs/tutorials/FlowTutorial.md` is illustrat
 
 ![Commands added to delete partial stages](images/command.png)
 
-### - Changes in Global Routing source code to decrease CPU usage time 
+-###  Changes in Global Routing source code to decrease CPU usage time 
 
 The suggested improvement is in the source file of global routing. The file which has been changed is `./tools/OpenROAD/src/grt/src/Grih.cpp` :
 
@@ -131,7 +131,7 @@ All metadata rules passed (22 rules)
 Justification: 
 In the `Grid.cpp` file, there is a function, `getPositionOnGrid()` where co-ordinates of a position is calculated and stored in variables `gcell_id_x` and `gcell_id_y` which are x center and y center respectively. I found out that there is extra computation work being done when x center in greater than or equal to `x_grids_` which is the limit of x center or when y center in greater than or equal to `y_grids_` which is the limit of y center. Since it is already more than the limiting co-ordinates, subtracting a unit co-ordinate won't make the position inside the Grid anyways. So, commenting this portion of code does not affect the flow and the computatio time also gets reduced.
 
-### - RTL to GDSII flow for AMBA APB Communication Protocol 
+- ###  RTL to GDSII flow for AMBA APB Communication Protocol 
 
 Out of my own curiosity, I wrote the RTL code for APB communication protocol with a master and two slaves and generated the `.gds` file for it and performed several functions on it like Autotuner, DRC rule check, verified the netlist, etc.
 
