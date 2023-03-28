@@ -133,7 +133,62 @@ In the `Grid.cpp` file, there is a function, `getPositionOnGrid()` where co-ordi
 
 ### - RTL to GDSII flow for AMBA APB Communication Protocol 
 
-Out of my own curiosity, I wrote the RTL code for APB communication protocol with a master and two slaves and generated the `.gds` file for it and performed several functions on it like Autotuner, DRC rule check, verified the netlist, etc.
+Out of my own curiosity, I wrote the RTL code for APB communication protocol with a master and two slaves and generated the `.gds` file for it and performed several functions on it like Autotuner, DRC rule check, verified the netlist, etc. I have used the `nand45` pdk for the flow. I have set the `clk_period` to 0.46 and `clk_io_pct` to 0.2. 
+
+Final GUI of the `.gds` file:
+![gui_final](images/gui_final.png)
+
+Few important logs from final report is given below:
+
+```
+finish report_power
+--------------------------------------------------------------------------
+Group              	Internal  Switching	Leakage  	Total
+                      	Power  	Power  	Power  	Power (Watts)
+----------------------------------------------------------------
+Sequential         	1.18e-03   4.47e-04   4.42e-05   1.67e-03  87.7%
+Combinational      	8.07e-05   7.69e-05   7.67e-05   2.34e-04  12.3%
+Macro              	0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+Pad                	0.00e+00   0.00e+00   0.00e+00   0.00e+00   0.0%
+----------------------------------------------------------------
+Total              	1.26e-03   5.24e-04   1.21e-04   1.90e-03 100.0%
+                      	66.1%  	27.5%   	6.4%
+
+==========================================================================
+finish report_design_area
+--------------------------------------------------------------------------
+Design area 5934 u^2 59% utilization.
+```
+
+The Design Rule Check log is given below:
+
+```
+[INFO][FLOW] Using platform directory ./platforms/nangate45
+./util/checkMetadata.py -m reports/nangate45/amba_apb/base/metadata-base.json -r ./designs/nangate45/amba_apb/rules-base.json 2>&1 | tee reports/nangate45/amba_apb/base/metadata-base-check.log
+[INFO] synth__design__instance__area__stdcell pass test: 519.764 <= 598.0
+[INFO] constraints__clocks__count pass test: 1.0 == 1.0
+[INFO] placeopt__design__instance__area pass test: 540.778 <= 622.0
+[INFO] placeopt__design__instance__count__stdcell pass test: 442.0 <= 508.0
+[INFO] detailedplace__design__violations pass test: 0.0 == 0.0
+[INFO] cts__timing__setup__ws pass test: -0.08 >= -0.19
+[INFO] cts__timing__setup__ws__pre_repair pass test: -0.14 >= -0.25
+[INFO] cts__timing__setup__ws__post_repair pass test: -0.14 >= -0.25
+[INFO] cts__design__instance__count__setup_buffer pass test: 6.0 <= 22.0
+[INFO] cts__design__instance__count__hold_buffer pass test: 0.0 <= 22.0
+[INFO] globalroute__timing__clock__slack pass test: -0.084 >= -0.1
+[INFO] globalroute__timing__setup__ws pass test: -0.08 >= -0.1
+[INFO] detailedroute__route__wirelength pass test: 2459.0 <= 2828.0
+[INFO] detailedroute__route__drc_errors pass test: 0.0 <= 0.0
+[INFO] finish__timing__setup__ws pass test: -0.08 >= -0.09
+[INFO] finish__design__instance__area pass test: 579.348 <= 666.0
+[INFO] finish__timing__drv__max_slew_limit pass test: 0.4752 >= -0.2
+[INFO] finish__timing__drv__max_fanout_limit pass test: 1.0000000150474662e+30 >= -0.2
+[INFO] finish__timing__drv__max_cap_limit pass test: 0.8876 >= -0.2
+[INFO] finish__timing__drv__setup_violation_count pass test: 1.0 <= 10.0
+[INFO] finish__timing__drv__hold_violation_count pass test: 0.0 <= 10.0
+[INFO] finish__timing__wns_percent_delay pass test: -17.893797 >= -30.22
+All metadata rules passed (22 rules)
+```
 
 
 
